@@ -15,17 +15,15 @@ import java.util.regex.Pattern;
 /**
  * @author Aditi Garg
  *
- * Version 0.1
+ *         Version 0.1
  */
 public class ValidateLogFile {
 
-/*
- * Main method for below functionality
- * 1. load property file and its values
- * 2. loads the log file and scan it line by line
- * 3. reads entry and exit timestamp
- * 4. display the difference between entry and exit
- */
+	/*
+	 * Main method for below functionality 1. load property file and its values
+	 * 2. loads the log file and scan it line by line 3. reads entry and exit
+	 * timestamp 4. display the difference between entry and exit
+	 */
 	public static void main(String[] args) {
 
 		long timeInMilliSecondsEntered = 0L;
@@ -38,36 +36,38 @@ public class ValidateLogFile {
 
 			// load a properties file
 			prop.load(input);
-			
-		  //loading log file generated
+
+			// loading log file generated
 			File file = new File(prop.getProperty(Constants.FILEPATH));
-		
-		//scanning the log file	
+
+			// scanning the log file
 			scanner = new Scanner(file);
-			
-		//scanning log file line by line	
+
+			// scanning log file line by line
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
 				String patternEntered = Constants.ENTRYPATTERN;
 				String patternExited = Constants.EXITPATTERN;
-				
-				//Analysing entry pattern and exit pattern
+
+				// Analysing entry pattern and exit pattern
 				if (patternMatcher(line, patternEntered)) {
 					timeInMilliSecondsEntered = getTimestamp(line);
 				} else if (patternMatcher(line, patternExited)) {
 					timeInMilliSecondsExited = getTimestamp(line);
 				}
-				
-				//Calculating and display the time difference between entry time and exit time 
+
+				// Calculating and display the time difference between entry
+				// time and exit time
 				if (timeInMilliSecondsEntered != 0L && timeInMilliSecondsExited != 0L) {
 					long timeInMilliSecondsDiff = timeInMilliSecondsExited - timeInMilliSecondsEntered;
 					Date date2 = new Date(timeInMilliSecondsDiff);
-					
+
 					SimpleDateFormat sdf2 = new SimpleDateFormat(Constants.TIMEFORMAT);
 					sdf2.setTimeZone(TimeZone.getTimeZone(prop.getProperty(Constants.TIMEZONE)));
 					System.out.println("Timestamp difference in HH:mm:ss is " + sdf2.format(date2));
-					
-					//once time difference is retrieved then set the entry time and exit time to zero
+
+					// once time difference is retrieved then set the entry time
+					// and exit time to zero
 					timeInMilliSecondsExited = 0L;
 					timeInMilliSecondsEntered = 0L;
 				}
@@ -80,9 +80,7 @@ public class ValidateLogFile {
 	}
 
 	/*
-	 * Method to match string with pattern
-	 * input- String, String
-	 * output- boolean
+	 * Method to match string with pattern input- String, String output- boolean
 	 */
 	private static boolean patternMatcher(String line, String pattern) {
 		Pattern p = Pattern.compile(pattern);
@@ -93,12 +91,9 @@ public class ValidateLogFile {
 		return false;
 	}
 
-	
 	/*
-	 * Method to return the timestamp present in the string line
-	 * and converting it to milliseconds
-	 * input- String
-	 * output- long
+	 * Method to return the timestamp present in the string line and converting
+	 * it to milliseconds input- String output- long
 	 */
 	private static long getTimestamp(String line) {
 		long timeInMilliSeconds = 0L;
